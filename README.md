@@ -9,5 +9,15 @@ Url Lookup Service provides web site secure level for requested url. A client wa
 
 
 
-## Lookup Url Information
+## Url Information Lookup
 https://github.com/ukmjkim/url_lookup_service/blob/master/docs/UrlLookupService_GET_SequenceDiagram.png
+
+
+## Unsafe Url Information Creation
+https://github.com/ukmjkim/url_lookup_service/blob/master/docs/UrlLookupService_POST_SequenceDiagram.png
+
+## Unsafe Url Information Deletion
+https://github.com/ukmjkim/url_lookup_service/blob/master/docs/UrlLookupService_DELETE_SequenceDiagram.png
+
+
+
