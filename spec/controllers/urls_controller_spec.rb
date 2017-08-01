@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe UrlsController, type: :controller do
+RSpec.describe UrlinfosController, type: :controller do
 
 end
