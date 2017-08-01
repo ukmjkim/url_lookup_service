@@ -48,6 +48,16 @@ RSpec.describe 'Urlinfos API', type: :request do
     end
   end
 
+  describe 'GET /urlinfo/a/:domain_name/:query_string' do
+    before { get "/urlinfo/1/www.naver.com/q=123" }
+
+    context 'when the record exists' do
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+  end
+
   describe 'POST /urlinfos' do
     let(:valid_attributes) { { url: 'www.google.com', malware: true, created_by: '1' } }
 

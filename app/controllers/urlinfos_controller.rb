@@ -1,5 +1,6 @@
 class UrlinfosController < ApplicationController
   before_action :set_urlinfo, only: [:show, :update, :destroy]
+  before_action :set_urlinfo_by_url, only: [:find_by_url]
 
   def index
     @urlinfos = Urlinfo.all
@@ -20,6 +21,12 @@ class UrlinfosController < ApplicationController
     head :no_content
   end
 
+  def find_by_url
+     puts params[:num]
+     puts params[:domain_name]
+     puts params[:query_string]
+  end
+
   private
 
   def urlinfo_params
@@ -28,5 +35,10 @@ class UrlinfosController < ApplicationController
 
   def set_urlinfo
     @urlinfo = Urlinfo.find(params[:id])
+  end
+
+  def set_urlinfo_by_url
+    puts params[:domain_name]
+    puts params[:query_string]
   end
 end
