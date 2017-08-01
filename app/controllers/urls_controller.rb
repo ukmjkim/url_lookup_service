@@ -23,7 +23,7 @@ class UrlsController < ApplicationController
   private
 
   def url_params
-    params.permit(:url, :created_by)
+    params.permit(:url, :malware, :created_by)
   end
 
   def set_url
