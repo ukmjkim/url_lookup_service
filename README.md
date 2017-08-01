@@ -30,3 +30,10 @@ https://github.com/ukmjkim/url_lookup_service/blob/master/docs/UrlLookupService_
 ## Unsafe Url Information Deletion
 https://github.com/ukmjkim/url_lookup_service/blob/master/docs/UrlLookupService_DELETE_SequenceDiagram.png
 
+
+## Steps in implementation
+- impletmenting basic web service
+    - GET, POST, DELETE to databse
+- [BLOCKER] non-resourceful route issue
+- modifying controller to proceed expecting request
+- integrating Redis
