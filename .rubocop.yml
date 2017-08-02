@@ -1,0 +1,10 @@
+AllCops:
+  Exclude:
+    - 'vendor/**/*'
+    - 'spec/fixtures/**/*'
+    - 'tmp/**/*'
+    - 'config/**/*'
+    - 'config/puma*'
+    - 'bin/*'
+    - 'app/mailers/*'
+    - 'db/**/*'
