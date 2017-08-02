@@ -1,3 +1,4 @@
+# The controller to provide urlinfo service
 class UrlinfosController < ApplicationController
   before_action :set_urlinfo, only: [:show, :update, :destroy]
   before_action :fetch_urlinfo_from_storage, only: [:find_by_url]
@@ -27,23 +28,13 @@ class UrlinfosController < ApplicationController
   end
 
   def create_by_url
+    # 1. generating full uri from domain_name and query_string
+    #     cache stores full uri as key and malware flag as value
     param_url = generate_url_from_params 
+    # 2. making empty response object with full uri
     Urlinfo.make_empty_response_object(param_url)
-    @urlinfo = Urlinfo.where(domain_name: params[:domain_name],
-                             query_string: params[:query_string]).first
-    if @urlinfo.nil?
-      @urlinfo = Urlinfo.create!(:url => param_url,
-                                 :malware => true,
-                                 :created_by => params[:requested_by],
-                                 :domain_name => params[:domain_name],
-                                 :query_string => params[:query_string])
-    else
-      @urlinfo.update(:url => param_url,
-                      :malware => true,
-                      :created_by => params[:requested_by],
-                      :domain_name => params[:domain_name],
-                      :query_string => params[:query_string])
-    end
+    fetch_urlinfo_from_database(params)
+    store_urlinfo_to_database(@urlinfo, params)
     @result[:data_from] = "database"
     @result[:malware] = true 
     json_response(@result, :created)
@@ -58,6 +49,22 @@ class UrlinfosController < ApplicationController
 
   def set_urlinfo
     @urlinfo = Urlinfo.find(params[:id])
+  end
+
+  def store_urlinfo_to_database(@urlinfo, params)
+    if @urlinfo.nil?
+      @urlinfo = Urlinfo.create!(url: param_url,
+                                 malware: true,
+                                 created_by: params[:requested_by],
+                                 domain_name: params[:domain_name],
+                                 query_string: params[:query_string])
+    else
+      @urlinfo.update(url: param_url,
+                      malware: true,
+                      created_by: params[:requested_by],
+                      domain_name: params[:domain_name],
+                      query_string: params[:query_string])
+    end
   end
 
   def fetch_urlinfo_from_storage
@@ -97,9 +104,9 @@ class UrlinfosController < ApplicationController
 
   def make_empty_response_object(param_url)
     @result = {
-      :url => param_url,
-      :malware => nil,
-      :data_from => nil 
+      url: param_url,
+      malware: nil,
+      data_from: nil
     }
   end
 
