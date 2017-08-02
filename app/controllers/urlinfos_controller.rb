@@ -1,6 +1,7 @@
 class UrlinfosController < ApplicationController
   before_action :set_urlinfo, only: [:show, :update, :destroy]
-  before_action :set_urlinfo_by_url, only: [:find_by_url, :delete_by_url]
+  before_action :set_urlinfo_from_cache, only: [:find_by_url]
+  before_action :set_urlinfo_from_db, only: [:delete_by_url]
 
   def index
     @urlinfos = Urlinfo.all
@@ -30,6 +31,8 @@ class UrlinfosController < ApplicationController
     @urlinfo = Urlinfo.where(domain_name: params[:domain_name], query_string: params[:query_string]).first
     if @urlinfo.nil?
       @urlinfo = Urlinfo.create!(:url => param_url, :malware => true, :created_by => params[:requested_by], :domain_name => params[:domain_name], :query_string => params[:query_string])
+    else
+      @urlinfo.update(:url => param_url, :malware => true, :created_by => params[:requested_by], :domain_name => params[:domain_name], :query_string => params[:query_string])
     end
     json_response(@urlinfo, :created)
   end
@@ -45,7 +48,15 @@ class UrlinfosController < ApplicationController
     @urlinfo = Urlinfo.find(params[:id])
   end
 
-  def set_urlinfo_by_url
+  def set_urlinfo_from_cache
+    param_url = generate_url_from_params
+    @urlinfo = Urlinfo.get_url_in_cache(param_url)
+    if @urlinfo.nil?
+      set_urlinfo_from_db
+    end
+  end
+
+  def set_urlinfo_from_db
     @urlinfo = Urlinfo.where(domain_name: params[:domain_name], query_string: params[:query_string])
   end
 
