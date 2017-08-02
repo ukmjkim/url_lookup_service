@@ -4,6 +4,10 @@ RSpec.describe 'Urlinfos API', type: :request do
   # initialize test data
   let!(:urlinfos) { create_list(:urlinfo, 10) }
   let(:urlinfo_id) { urlinfos.first.id }
+  let(:urlinfo_url) { urlinfos.first.url }
+  let(:urlinfo_domain_name) { urlinfos.first.domain_name }
+  let(:urlinfo_query_string) { urlinfos.first.query_string }
+  let(:urlinfo_created_by) { urlinfos.first.created_by }
 
   # Test suite for GET /urlinfos
   describe 'GET /urlinfos' do
@@ -11,7 +15,6 @@ RSpec.describe 'Urlinfos API', type: :request do
     before { get '/urlinfos' }
 
     it 'returns urlinfos' do
-      puts json
       expect(json).not_to be_empty
       expect(json.size).to eq(10)
     end
@@ -48,29 +51,47 @@ RSpec.describe 'Urlinfos API', type: :request do
     end
   end
 
-  describe 'GET /urlinfo/a/:domain_name/:query_string' do
-    before { get "/urlinfo/1/www.naver.com/q=123" }
+  describe 'GET /urlinfo/:created_by/:domain_name/:query_string' do
+    before { get "/urlinfo/#{urlinfo_created_by}/#{urlinfo_domain_name}/#{urlinfo_query_string}" }
 
     context 'when the record exists' do
+      it 'returns the urlinfo' do
+        expect(json).not_to be_empty
+      end
+
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
       end
     end
   end
 
-  describe 'POST /urlinfos' do
-    let(:valid_attributes) { { url: 'www.google.com', malware: true, created_by: '1' } }
+  describe 'POST /urlinfo/:created_by/:domain_name/:query_string' do
+    let(:valid_attributes) { { url: 'www.google.com/?q=abc', malware: true, created_by: '1', domain_name: 'www.google.com', query_string: 'q=abc' } }
 
     context 'when the request is valid' do
-      before { post '/urlinfos', params: valid_attributes }
+      before { post '/urlinfo/1/www.google.com/q=abc', params: valid_attributes }
 
       it 'creates a urlinfo' do
-        expect(json['url']).to eq('www.google.com')
+        expect(json['url']).to eq('www.google.com/?q=abc')
+        expect(json['domain_name']).to eq('www.google.com')
         expect(json['malware']).to eq(true)
       end
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
+      end
+    end
+
+    context 'when the request is invalid - missing domain_name' do
+      before { post '/urlinfos', params: { url: 'www.yahoo.com', malware: true, created_by: '1' } }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'returns a validation failure message' do
+        expect(response.body)
+          .to match(/Validation failed: Domain name can't be blank/)
       end
     end
 
@@ -101,8 +122,8 @@ RSpec.describe 'Urlinfos API', type: :request do
     end
   end
 
-  describe 'DELETE /urlinfos/:id' do
-    before { delete "/urlinfos/#{urlinfo_id}" }
+  describe 'DELETE /urlinfo/:created_by/:domain_name/:query_string' do
+    before { delete "/urlinfo/1/www.google.com/q=abc" }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

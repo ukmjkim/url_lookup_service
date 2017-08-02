@@ -1,6 +1,6 @@
 class UrlinfosController < ApplicationController
   before_action :set_urlinfo, only: [:show, :update, :destroy]
-  before_action :set_urlinfo_by_url, only: [:find_by_url]
+  before_action :set_urlinfo_by_url, only: [:find_by_url, :delete_by_url]
 
   def index
     @urlinfos = Urlinfo.all
@@ -8,7 +8,7 @@ class UrlinfosController < ApplicationController
   end
 
   def create
-    @urlinfo = Urlinfo.create!(urlinfo_params)
+    @urlinfo = Urlinfo.create!(params.permit(:url, :malware, :created_by))
     json_response(@urlinfo, :created)
   end
 
@@ -22,23 +22,38 @@ class UrlinfosController < ApplicationController
   end
 
   def find_by_url
-     puts params[:num]
-     puts params[:domain_name]
-     puts params[:query_string]
+    json_response(@urlinfo)
+  end
+
+  def create_by_url
+    param_url = generate_url_from_params 
+    @urlinfo = Urlinfo.where(domain_name: params[:domain_name], query_string: params[:query_string]).first
+    if @urlinfo.nil?
+      @urlinfo = Urlinfo.create!(:url => param_url, :malware => true, :created_by => params[:requested_by], :domain_name => params[:domain_name], :query_string => params[:query_string])
+    end
+    json_response(@urlinfo, :created)
+  end
+
+  def delete_by_url
+    @urlinfo.destroy_all
+    head :no_content
   end
 
   private
-
-  def urlinfo_params
-    params.permit(:url, :malware, :created_by)
-  end
 
   def set_urlinfo
     @urlinfo = Urlinfo.find(params[:id])
   end
 
   def set_urlinfo_by_url
-    puts params[:domain_name]
-    puts params[:query_string]
+    @urlinfo = Urlinfo.where(domain_name: params[:domain_name], query_string: params[:query_string])
+  end
+
+  def generate_url_from_params
+    if params[:query_string].nil?
+      "#{params[:domain_name]}"
+    else
+      "#{params[:domain_name]}/?#{params[:query_string]}"
+    end
   end
 end
