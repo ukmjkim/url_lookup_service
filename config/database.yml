@@ -1,29 +1,15 @@
-# SQLite version 3.x
-#   gem install mysql
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'mysql'
-#
-default: &default
+development: &default
   adapter: mysql2
   encoding: utf8
+  database: urllookup
   username: root
   password:
   port: 3306
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
-
-development:
-  <<: *default
-  database: urllookup
-
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
 test:
   <<: *default
   database: urllookup_test
-
 production:
   <<: *default
   database: urllookup

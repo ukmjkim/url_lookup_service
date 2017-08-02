@@ -1,0 +1,14 @@
+development: &default
+  redis:
+    - :instance_id: redis_dev
+test:
+  redis:
+    - :instance_id: redis_test1
+    - :instance_id: redis_test2
+production:
+  redis:
+    - :instance_id: redis_cluster1
+    - :instance_id: redis_cluster2
+    - :instance_id: redis_cluster3
+default:
+  <<: *default
