@@ -124,8 +124,8 @@ RSpec.describe 'Urlinfos API', type: :request do
   describe 'DELETE /urlinfo/:created_by/:domain_name/:query_string' do
     before { delete '/urlinfo/1/www.google.com/q=abc' }
 
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
     end
   end
 end

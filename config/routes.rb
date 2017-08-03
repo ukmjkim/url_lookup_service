@@ -19,4 +19,6 @@ Rails.application.routes.draw do
     :domain_name => /[^\/]+/,
     :query_string => /[^\/]+/
   }
+
+  match '*a', :to => 'errors#routing', :via => [:get, :post, :delete]
 end

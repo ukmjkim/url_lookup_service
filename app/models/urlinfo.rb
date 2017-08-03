@@ -13,6 +13,11 @@ class Urlinfo < ApplicationRecord
     cache[url] = malware
   end
 
+  def del_urlinfo_from_cache(url, malware)
+    cache = get_cache_connection_by_url(url)
+    cache.del(url)
+  end
+
   def find_urlinfo_in_storage(params)
     param_url = generate_url_from_params(params)
     cached_value = get_url_in_cache(param_url)
@@ -51,9 +56,9 @@ class Urlinfo < ApplicationRecord
       domain_name: params[:domain_name],
       query_string: params[:query_string]
     ).destroy_all
-    set_urlinfo_in_cache(param_url, false)
+    del_urlinfo_from_cache(param_url, false)
 
-    { url: param_url, data_source: 'cache', malware: false }
+    { url: param_url, data_source: 'none', malware: false }
   end
 
   private
