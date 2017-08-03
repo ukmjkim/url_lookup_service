@@ -5,9 +5,9 @@ RSpec.describe 'Urlinfos API', type: :request do
   let!(:urlinfos) { create_list(:urlinfo, 10) }
   let(:urlinfo_id) { urlinfos.first.id }
   let(:urlinfo_url) { urlinfos.first.url }
-  let(:urlinfo_domain_name) { urlinfos.first.domain_name }
-  let(:urlinfo_query_string) { urlinfos.first.query_string }
-  let(:urlinfo_created_by) { urlinfos.first.created_by }
+  let(:domain_name) { urlinfos.first.domain_name }
+  let(:query_string) { urlinfos.first.query_string }
+  let(:created_by) { urlinfos.first.created_by }
 
   # Test suite for GET /urlinfos
   describe 'GET /urlinfos' do
@@ -52,7 +52,9 @@ RSpec.describe 'Urlinfos API', type: :request do
   end
 
   describe 'GET /urlinfo/:created_by/:domain_name/:query_string' do
-    before { get "/urlinfo/#{urlinfo_created_by}/#{urlinfo_domain_name}/#{urlinfo_query_string}" }
+    before do
+      get "/urlinfo/#{created_by}/#{domain_name}/#{query_string}"
+    end
 
     context 'when the record exists' do
       it 'returns the urlinfo' do
@@ -65,11 +67,21 @@ RSpec.describe 'Urlinfos API', type: :request do
     end
   end
 
-  describe 'POST /urlinfo/:created_by/:domain_name/:query_string' do
-    let(:valid_attributes) { { url: 'www.google.com/?q=abc', malware: true, created_by: '1', domain_name: 'www.google.com', query_string: 'q=abc' } }
+  describe 'POST url lookup' do
+    let(:valid_attributes) do
+      {
+        url: 'www.google.com/?q=abc',
+        malware: true,
+        created_by: '1',
+        domain_name: 'www.google.com',
+        query_string: 'q=abc'
+      }
+    end
 
     context 'when the request is valid' do
-      before { post '/urlinfo/1/www.google.com/q=abc', params: valid_attributes }
+      before do
+        post '/urlinfo/1/www.google.com/q=abc', params: valid_attributes
+      end
 
       it 'creates a urlinfo' do
         expect(json['url']).to eq('www.google.com/?q=abc')
@@ -82,7 +94,13 @@ RSpec.describe 'Urlinfos API', type: :request do
     end
 
     context 'when the request is invalid - missing domain_name' do
-      before { post '/urlinfos', params: { url: 'www.yahoo.com', malware: true, created_by: '1' } }
+      before do
+        post '/urlinfos', params: {
+          url: 'www.yahoo.com',
+          malware: true,
+          created_by: '1'
+        }
+      end
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -95,7 +113,12 @@ RSpec.describe 'Urlinfos API', type: :request do
     end
 
     context 'when the request is invalid - missing created_by' do
-      before { post '/urlinfos', params: { url: 'www.yahoo.com', malware: true } }
+      before do
+        post '/urlinfos', params: {
+          url: 'www.yahoo.com',
+          malware: true
+        }
+      end
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)

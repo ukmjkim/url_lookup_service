@@ -32,7 +32,7 @@ class UrlinfosController < ApplicationController
   end
 
   def delete_by_url
-    lookup_result =Urlinfo.new.destroy_urlinfo_from_database(params)
+    lookup_result = Urlinfo.new.destroy_urlinfo_from_database(params)
     json_response(lookup_result, :ok)
   end
 

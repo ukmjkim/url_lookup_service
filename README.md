@@ -37,3 +37,30 @@ https://github.com/ukmjkim/url_lookup_service/blob/master/docs/UrlLookupService_
 - [BLOCKER] non-resourceful route issue
 - modifying controller to proceed expecting request
 - integrating Redis
+
+
+## Test Instruction
+- Run a task to verify the url lookup service
+    - $ rake import_malware:import
+    - steps for testing
+      - import malware urls from sample file (downloaded from a public site)
+      - parse the urls and extract hostname and path_querystring 
+      - make POST requests to the url lookup service to store them to database and cache
+      - make GET requests to assert whether the urls exist in cache
+      - make DELETE requests to delete the urls from database and cache
+      - make GET requests to assert whether the urls no longer exist in both database and cache
+
+=============================================================
+Total #:     523
+Success #:   523
+Cache Hit #: 523
+Deleted #:   523
+No Hit #:    523
+-------------------------------------------------------------
+Finished! Took 0.0033476654211111114 hours
+=============================================================
+
+## Code Coverage & Style Checker Result
+- Test cases: 21 exmpales, 0 failures (over 80%)
+- Code coverage result file: coverage/index.html
+- Style Checker result: 21 files inspected, 7 offenses detected, (Too many lines)
