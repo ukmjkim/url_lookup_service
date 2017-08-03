@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :urlinfo do
-    domain_name { "#{Faker::Internet.domain_name}" }
-    query_string { "q=abc" }
+    domain_name { Faker::Internet.domain_name.to_s }
+    query_string { 'q=abc' }
     url { "#{domain_name}/?#{query_string}" }
     malware { true }
-    created_by { "1" }
+    created_by { '1' }
   end
 end

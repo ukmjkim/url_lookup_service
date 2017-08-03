@@ -46,7 +46,7 @@ RSpec.describe 'Urlinfos API', type: :request do
       end
 
       it 'returns a not found message' do
-        expect(response.body).to match (/Couldn't find Url/)
+        expect(response.body).to match(/Couldn't find Url/)
       end
     end
   end
@@ -73,7 +73,6 @@ RSpec.describe 'Urlinfos API', type: :request do
 
       it 'creates a urlinfo' do
         expect(json['url']).to eq('www.google.com/?q=abc')
-        expect(json['domain_name']).to eq('www.google.com')
         expect(json['malware']).to eq(true)
       end
 
@@ -123,7 +122,7 @@ RSpec.describe 'Urlinfos API', type: :request do
   end
 
   describe 'DELETE /urlinfo/:created_by/:domain_name/:query_string' do
-    before { delete "/urlinfo/1/www.google.com/q=abc" }
+    before { delete '/urlinfo/1/www.google.com/q=abc' }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
