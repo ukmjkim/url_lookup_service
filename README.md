@@ -68,5 +68,28 @@ Finished! Took 0.0033476654211111114 hours
 - Style Checker result: 21 files inspected, 7 offenses detected, (Too many lines)
 
 ## Installation Guide
-TODO
+```
+$ sudo yum update
+$ sudo yum groupinstall "Development Tools"
+$ \curl -L https://get.rvm.io | bash -s stable
 
+	If permission error: 
+$ command curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+$ source /home/ec2-user/.rvm/scripts/rvm
+$ rvm list
+$ openssl
+$ openssl version -d
+$ rvm install 2.4.0 -- --with-openssl-dir=/etc/pki/tls
+$ gem install rails
+
+$ sudo yum install mysql-devel
+
+$ sudo yum -y install gcc make
+$ cd /usr/local/src
+$ sudo mkdir redis_install
+$ redis_install
+$ sudo wget http://download.redis.io/releases/redis-4.0.1.tar.gz
+$ sudo tar xzf redis-4.0.1.tar.gz
+$ cd redis-4.0.1
+$ sudo make distclean && sudo make
+```
