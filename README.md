@@ -66,3 +66,7 @@ Finished! Took 0.0033476654211111114 hours
 - Test cases: 21 exmpales, 0 failures (over 80%)
 - Code coverage result file: coverage/index.html
 - Style Checker result: 21 files inspected, 7 offenses detected, (Too many lines)
+
+## Installation Guide
+TODO
+
