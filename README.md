@@ -50,15 +50,12 @@ https://github.com/ukmjkim/url_lookup_service/blob/master/docs/UrlLookupService_
       - make DELETE requests to delete the urls from database and cache
       - make GET requests to assert whether the urls no longer exist in both database and cache
 
-=============================================================
 Total #:     523
 Success #:   523
 Cache Hit #: 523
 Deleted #:   523
 No Hit #:    523
--------------------------------------------------------------
 Finished! Took 0.0033476654211111114 hours
-=============================================================
 
 ## Code Coverage & Style Checker Result
 - Test cases: 21 exmpales, 0 failures (over 80%)
