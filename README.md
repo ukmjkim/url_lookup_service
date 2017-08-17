@@ -92,4 +92,34 @@ $ sudo wget http://download.redis.io/releases/redis-4.0.1.tar.gz
 $ sudo tar xzf redis-4.0.1.tar.gz
 $ cd redis-4.0.1
 $ sudo make distclean && sudo make
+
+$ sudo mkdir /etc/redis
+$ sudo mkdir /var/lib/redis
+$ sudo mkdir /var/redis
+$ sudo cp src/redis-server src/redis-cli /usr/local/bin
+$ sudo cp redis.conf /etc/redis/redis.conf
+$ sudo vi /etc/redis/redis.conf
+$ sudo wget https://raw.githubusercontent.com/saxenap/install-redis-amazon-linux-centos/master/redis-server
+$ sudo mv redis-server /etc/init.d
+$ sudo chmod 755 /etc/init.d/redis-server
+$ sudo vi /etc/init.d/redis-server
+$ sudo chkconfig --add redis-server
+$ sudo chkconfig --level 345 redis-server on
+$ sudo service redis-server start
+$ sudo vi /etc/sysctl.conf
+$ sysctl vm.overcommit_memory=1
+$ sudo sysctl vm.overcommit_memory=1
+$ redis-cli ping
+```
+
+
+```
+Unit Test
+$ bundle exec rspec
+
+Stylecheck
+$ rubocop
+
+Functional Test
+$ rake import_malware:import
 ```
